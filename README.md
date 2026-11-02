@@ -72,6 +72,56 @@ User authentication mechanisms are essential to ensure secure and authorized acc
 Client-server chat applications are versatile tools that facilitate real-time communication between users over a network. They incorporate various components, including server-side and client-side elements, and must consider factors such as security, scalability, and concurrency. As technology continues to advance, client-server chat applications remain integral for collaborative communication in various domains.
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
+## Program:
+```import socket
+import threading
+
+# ---------------- SERVER ----------------
+def run_server():
+    server = socket.socket()
+    host = socket.gethostname()
+    port = 8080
+
+    server.bind((host, port))
+    server.listen(1)
+
+    print("Server running on", host)
+    conn, addr = server.accept()
+    print(addr, "connected to server")
+
+    while True:
+        msg = conn.recv(1024).decode()
+        print("\nClient:", msg)
+
+        reply = input("Server >> ")
+        conn.send(reply.encode())
+
+
+# ---------------- CLIENT ----------------
+def run_client():
+    client = socket.socket()
+    host = socket.gethostname()
+    port = 8080
+
+    client.connect((host, port))
+    print("Connected to server")
+
+    while True:
+        msg = input("Client >> ")
+        client.send(msg.encode())
+
+        reply = client.recv(1024).decode()
+        print("Server:", reply)
+
+
+# ---------------- MAIN ----------------
+# Run both in parallel
+threading.Thread(target=run_server).start()
+threading.Thread(target=run_client).start()
+```
+
+## Output :
+<img width="1917" height="392" alt="image" src="https://github.com/user-attachments/assets/934594d7-49c0-40ba-8883-851217ab2a23" />
 
 
 ## Result:
